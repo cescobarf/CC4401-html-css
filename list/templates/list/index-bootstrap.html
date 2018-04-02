@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventario</title>
+</head>
+<body>
+{% load bootstrap4 %}
+{% bootstrap_css %}
+<div class="container">
+    <h3 class="mt-2">Inventario CC4401</h3>
+
+    <form class="form-inline" action="{% url 'list:add' %}" method="post">
+        {% csrf_token %}
+        <input type="text" class="form-control" name="item-name" placeholder="Nuevo producto">
+        <button type="submit" class="btn btn-primary" value="Agregar">Agregar</button>
+    </form>
+    <hr>
+    {% if items %}
+        <ul>
+            {% for item in items %}
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group row">
+                        <div class="col-3">
+                            <button class="btn btn-danger" formaction="{% url 'list:delete' %}" type="submit"
+                                    name="delete-pk" value="{{ item.id }}">Borrar
+                            </button>
+                            &nbsp;{{ item.name }}
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-light" formaction="{% url 'list:decrease' %}" type="submit"
+                                    name="decrease-pk" value="{{ item.id }}">-
+                            </button>
+                            &nbsp;{{ item.quantity }}&nbsp;
+                            <button class="btn btn-light" formaction="{% url 'list:increase' %}" type="submit"
+                                    name="increase-pk" value="{{ item.id }}">+
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay items en el inventario</p>
+    {% endif %}
+
+</div>
+</body>
+</html>

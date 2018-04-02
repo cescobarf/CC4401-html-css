@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventario</title>
+</head>
+<body>
+<h3>Inventario CC4401</h3>
+
+<form action="{% url 'list:add' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="item-name" placeholder="Nuevo producto">
+    <input type="submit" value="Agregar">
+</form>
+{% if items %}
+    <ul>
+        {% for item in items %}
+            <form method="post">
+                {% csrf_token %}
+                <button formaction="{% url 'list:delete' %}" type="submit" name="delete-pk" value="{{ item.id }}">
+                    Borrar
+                </button>
+                {{ item.name }}
+                <button formaction="{% url 'list:decrease' %}" type="submit" name="decrease-pk" value="{{ item.id }}">
+                    -
+                </button>
+                {{ item.quantity }}
+                <button formaction="{% url 'list:increase' %}" type="submit" name="increase-pk" value="{{ item.id }}">
+                    +
+                </button>
+            </form>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No hay items en el inventario</p>
+{% endif %}
+</body>
+</html>

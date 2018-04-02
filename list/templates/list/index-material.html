@@ -1,0 +1,50 @@
+{% extends 'materialize/materialize_base.html' %}
+{% block content %}
+    <div class="container">
+        <h3>Inventario CC4401</h3>
+
+        <form action="{% url 'list:add' %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="item-name" placeholder="Nuevo producto">
+            <button type="submit" class="btn waves-effect waves-light" value="Agregar">
+                Agregar <i class="material-icons right">send</i>
+            </button>
+        </form>
+
+        <div class="section">
+
+            {% if items %}
+                <ul>
+                    {% for item in items %}
+                        <div class="row">
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="col s2">
+                                    <button class="btn waves-effect waves-light btn-small red darken-2"
+                                            formaction="{% url 'list:delete' %}" type="submit" name="delete-pk"
+                                            value="{{ item.id }}">
+                                        <i class="material-icons">delete</i>
+                                    </button>
+                                    &nbsp;{{ item.name }}
+                                </div>
+                                <button class="btn waves-effect waves-light btn-small blue lighten-4"
+                                        formaction="{% url 'list:decrease' %}" type="submit" name="decrease-pk"
+                                        value="{{ item.id }}">-
+                                </button>
+                                &nbsp;{{ item.quantity }}&nbsp;
+                                <button class="btn waves-effect waves-light btn-small blue lighten-4"
+                                        formaction="{% url 'list:increase' %}" type="submit" name="increase-pk"
+                                        value="{{ item.id }}">+
+                                </button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No hay items en el inventario</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+{% endblock %}
